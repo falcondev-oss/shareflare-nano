@@ -1,6 +1,6 @@
 declare global {
   interface SubtleCrypto {
-    timingSafeEqual(a: ArrayBufferView, b: ArrayBufferView): boolean;
+    timingSafeEqual(a: ArrayBuffer | ArrayBufferView, b: ArrayBuffer | ArrayBufferView): boolean;
   }
 }
 
@@ -16,11 +16,13 @@ export default {
 
     if (request.method === "POST" && url.pathname === "/") {
       const authorization = request.headers.get("authorization");
-      const supplied = new TextEncoder().encode(authorization?.slice(7) ?? "");
-      const expected = new TextEncoder().encode(env.UPLOAD_TOKEN);
+      const encode = new TextEncoder();
+      const [supplied, expected] = await Promise.all([
+        crypto.subtle.digest("SHA-256", encode.encode(authorization?.slice(7) ?? "")),
+        crypto.subtle.digest("SHA-256", encode.encode(env.UPLOAD_TOKEN)),
+      ]);
       if (
         !authorization?.startsWith("Bearer ") ||
-        supplied.byteLength !== expected.byteLength ||
         !crypto.subtle.timingSafeEqual(supplied, expected)
       ) {
         return new Response("Unauthorized\n", { status: 401 });
