@@ -1,9 +1,10 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "cloudshare-nano",
+  "name": "shareflare-nano",
   "main": "src/index.ts",
   "compatibility_date": "2026-08-02",
   "r2_buckets": [
-    { "binding": "FILES", "bucket_name": "cloudshare-nano" }
-  ]
+    { "binding": "FILES", "bucket_name": "shareflare-nano" }
+  ],
+  "secrets": { "required": ["UPLOAD_TOKEN"] }
 }
