@@ -2,7 +2,13 @@
   "name": "shareflare-nano",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@11.12.0",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^12.11.2",
+      "onFail": "warn"
+    }
+  },
   "scripts": {
     "test": "node --experimental-strip-types --test",
     "typecheck": "tsc --noEmit",
